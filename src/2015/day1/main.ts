@@ -1,7 +1,7 @@
 import { getInputAsString } from '../../getInput.ts';
 
 export const year = '2015';
-export const day = 'day01';
+export const day = 'day1';
 export const testsPart1 = [
   { input: '(())', result: 0 },
   { input: '()()', result: 0 },

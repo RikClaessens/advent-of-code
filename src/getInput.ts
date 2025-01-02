@@ -14,6 +14,7 @@ export const makeDir = (path: string) => {
     console.log(e);
   }
 };
+
 export const writeToFile = (path: string, data: string) => {
   const encoder = new TextEncoder();
   const encodedData = encoder.encode(data);

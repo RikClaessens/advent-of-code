@@ -1,4 +1,4 @@
-import { getInput, writeToFile } from '../../getInput.ts';
+import { getInput } from '../../getInput.ts';
 
 export const year = '2015';
 export const day = 'day6';

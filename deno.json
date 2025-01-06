@@ -6,6 +6,8 @@
   },
   "imports": {
     "@std/assert": "jsr:@std/assert@1",
+    "@std/encoding": "jsr:@std/encoding@^1.0.6",
+    "@takker/md5": "jsr:@takker/md5@^0.1.0",
     "@viz-js/viz": "npm:@viz-js/viz@^3.11.0"
   }
 }

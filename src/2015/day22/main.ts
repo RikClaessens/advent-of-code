@@ -7,12 +7,13 @@ export const testsPart2 = [];
 
 export const input = getInput(`src/${year}/${day}/input.txt`);
 
+// cost, damage, effect damage, armor, heal, mana, timer
 const spells = [
-  { c: 53, dmg: 4, effDmg: 0, a: 0, h: 0, m: 0, t: 0 }, // Magic Missile
-  { c: 73, dmg: 2, effDmg: 0, a: 0, h: 2, m: 0, t: 0 }, // Drain
-  { c: 113, dmg: 0, effDmg: 0, a: 7, h: 0, m: 0, t: 6 }, // Shield
-  { c: 173, dmg: 0, effDmg: 3, a: 0, h: 0, m: 0, t: 6 }, // Poison
-  { c: 229, dmg: 0, effDmg: 0, a: 0, h: 0, m: 101, t: 5 }, // Recharge
+  { c: 53, d: 4, e: 0, a: 0, h: 0, m: 0, t: 0 }, // Magic Missile
+  { c: 73, d: 2, e: 0, a: 0, h: 2, m: 0, t: 0 }, // Drain
+  { c: 113, d: 0, e: 0, a: 7, h: 0, m: 0, t: 6 }, // Shield
+  { c: 173, d: 0, e: 3, a: 0, h: 0, m: 0, t: 6 }, // Poison
+  { c: 229, d: 0, e: 0, a: 0, h: 0, m: 101, t: 5 }, // Recharge
 ];
 
 type MyStats = {
@@ -45,7 +46,7 @@ const fight = (me: MyStats, boss: BossStats, myTurn: boolean) => {
   spells.forEach((spell, spellIndex) => {
     if (newMe.timers[spellIndex] > 0) {
       newMe.timers[spellIndex] -= 1;
-      newBoss.hp -= spell.effDmg;
+      newBoss.hp -= spell.e;
       newMe.armor += spell.a;
       newMe.mana += spell.m;
     }
@@ -76,7 +77,7 @@ const fight = (me: MyStats, boss: BossStats, myTurn: boolean) => {
           },
           {
             ...newBoss,
-            hp: newBoss.hp - spell.dmg,
+            hp: newBoss.hp - spell.d,
           },
           !myTurn,
         );

@@ -7,42 +7,20 @@ export const testsPart2 = [];
 
 export const input = getInput(`src/${year}/${day}/input.txt`);
 
-const magicMissile = {
-  c: 53,
-  dmg: 4,
-};
-
-const drain = {
-  c: 73,
-  dmg: 2,
-  h: 2,
-};
-
-const shield = {
-  c: 113,
-  a: 7,
-  t: 6,
-};
-
-const poison = {
-  c: 173,
-  dmg: 3,
-  t: 6,
-};
-
-const recharge = {
-  c: 229,
-  m: 101,
-  t: 5,
-};
+const spells = [
+  { c: 53, dmg: 4, effDmg: 0, a: 0, h: 0, m: 0, t: 0 }, // Magic Missile
+  { c: 73, dmg: 2, effDmg: 0, a: 0, h: 2, m: 0, t: 0 }, // Drain
+  { c: 113, dmg: 0, effDmg: 0, a: 7, h: 0, m: 0, t: 6 }, // Shield
+  { c: 173, dmg: 0, effDmg: 3, a: 0, h: 0, m: 0, t: 6 }, // Poison
+  { c: 229, dmg: 0, effDmg: 0, a: 0, h: 0, m: 101, t: 5 }, // Recharge
+];
 
 type MyStats = {
   hp: number;
+  armor: number;
   mana: number;
   manaSpent: number;
-  shield: number;
-  poison: number;
-  recharge: number;
+  timers: number[];
 };
 
 type BossStats = {
@@ -62,19 +40,16 @@ const fight = (me: MyStats, boss: BossStats, myTurn: boolean) => {
     return;
   }
 
-  let myArmor = 0;
-  if (newMe.poison > 0) {
-    newBoss.hp -= poison.dmg;
-    newMe.poison -= 1;
-  }
-  if (newMe.shield > 0) {
-    myArmor += shield.a;
-    newMe.shield -= 1;
-  }
-  if (newMe.recharge > 0) {
-    newMe.mana += recharge.m;
-    newMe.recharge -= 1;
-  }
+  newMe.armor = 0;
+
+  spells.forEach((spell, spellIndex) => {
+    if (newMe.timers[spellIndex] > 0) {
+      newMe.timers[spellIndex] -= 1;
+      newBoss.hp -= spell.effDmg;
+      newMe.armor += spell.a;
+      newMe.mana += spell.m;
+    }
+  });
 
   if (newBoss.hp <= 0) {
     minMana = Math.min(minMana, newMe.manaSpent);
@@ -82,76 +57,31 @@ const fight = (me: MyStats, boss: BossStats, myTurn: boolean) => {
   }
 
   if (!myTurn) {
-    newMe.hp -= Math.max(boss.dmg - myArmor, 1);
+    newMe.hp -= Math.max(boss.dmg - newMe.armor, 1);
     fight(newMe, newBoss, !myTurn);
   }
 
   if (myTurn) {
-    if (newMe.mana >= magicMissile.c) {
-      fight(
-        {
-          ...newMe,
-          mana: newMe.mana - magicMissile.c,
-          manaSpent: newMe.manaSpent + magicMissile.c,
-        },
-        {
-          ...newBoss,
-          hp: newBoss.hp - magicMissile.dmg,
-        },
-        !myTurn,
-      );
-    }
-    if (newMe.mana >= drain.c) {
-      fight(
-        {
-          ...newMe,
-          hp: newMe.hp + drain.h,
-          mana: newMe.mana - drain.c,
-          manaSpent: newMe.manaSpent + drain.c,
-        },
-        {
-          ...newBoss,
-          hp: newBoss.hp - drain.dmg,
-        },
-        !myTurn,
-      );
-    }
-    if (newMe.mana >= shield.c && newMe.shield === 0) {
-      fight(
-        {
-          ...newMe,
-          shield: shield.t,
-          mana: newMe.mana - shield.c,
-          manaSpent: newMe.manaSpent + shield.c,
-        },
-        newBoss,
-        !myTurn,
-      );
-    }
-    if (newMe.mana >= poison.c && newMe.poison === 0) {
-      fight(
-        {
-          ...newMe,
-          mana: newMe.mana - poison.c,
-          manaSpent: newMe.manaSpent + poison.c,
-          poison: poison.t,
-        },
-        newBoss,
-        !myTurn,
-      );
-    }
-    if (newMe.mana >= recharge.c && newMe.recharge === 0) {
-      fight(
-        {
-          ...newMe,
-          mana: newMe.mana - recharge.c,
-          manaSpent: newMe.manaSpent + recharge.c,
-          recharge: recharge.t,
-        },
-        newBoss,
-        !myTurn,
-      );
-    }
+    spells.forEach((spell, spellIndex) => {
+      if (newMe.mana >= spell.c && newMe.timers[spellIndex] === 0) {
+        fight(
+          {
+            ...newMe,
+            hp: newMe.hp + spell.h,
+            mana: newMe.mana - spell.c,
+            manaSpent: newMe.manaSpent + spell.c,
+            timers: newMe.timers.map((t, i) =>
+              i === spellIndex ? spell.t : t,
+            ),
+          },
+          {
+            ...newBoss,
+            hp: newBoss.hp - spell.dmg,
+          },
+          !myTurn,
+        );
+      }
+    });
   }
 };
 
@@ -160,11 +90,10 @@ let lose1hp = false;
 
 const me: MyStats = {
   hp: 50,
+  armor: 0,
   mana: 500,
   manaSpent: 0,
-  shield: 0,
-  poison: 0,
-  recharge: 0,
+  timers: Array(spells.length).fill(0),
 };
 
 const boss: BossStats = {

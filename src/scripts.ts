@@ -1,3 +1,5 @@
+import open from 'open';
+
 export const fetchInput = async () => {
   const aocDay = Deno.args[0];
   const AOC_SESSION = Deno.env.get('AOC_SESSION');
@@ -43,4 +45,15 @@ export const initAoCDay = () => {
   const encoder = new TextEncoder();
   const encodedData = encoder.encode(template);
   Deno.writeFileSync(`src/${aocDay}/main.ts`, encodedData);
+};
+
+export const openBrowser = () => {
+  const aocDay = Deno.args[0];
+
+  if (!aocDay) {
+    throw new Error('Please provide a valid aocDay');
+  }
+  const year = aocDay.split('/')[0];
+  const day = aocDay.split('/')[1].substring(3);
+  open(`https://adventofcode.com/${year}/day/${day}`);
 };

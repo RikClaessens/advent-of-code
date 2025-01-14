@@ -1,4 +1,5 @@
-import { fetchInput, initAoCDay } from './scripts.ts';
+import { fetchInput, initAoCDay, openBrowser } from './scripts.ts';
 
 initAoCDay();
 fetchInput();
+openBrowser();

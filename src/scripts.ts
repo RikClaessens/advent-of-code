@@ -33,7 +33,9 @@ export const initAoCDay = () => {
   if (!aocDay) {
     throw new Error('Please provide a valid aocDay');
   }
-  Deno.mkdirSync(`src/${aocDay}`);
+  Deno.mkdirSync(`src/${aocDay}`, {
+    recursive: true,
+  });
 
   const year = aocDay.split('/')[0];
   const day = aocDay.split('/')[1].substring(3);

@@ -9,6 +9,7 @@
     "@std/encoding": "jsr:@std/encoding@^1.0.6",
     "@takker/md5": "jsr:@takker/md5@^0.1.0",
     "@viz-js/viz": "npm:@viz-js/viz@^3.11.0",
-    "open": "npm:open@^10.1.0"
+    "open": "npm:open@^10.1.0",
+    "z3-solver": "npm:z3-solver@^4.15.3"
   }
 }

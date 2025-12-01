@@ -67,5 +67,3 @@ const doRotations = (input: string[]): [number, number] => {
 export const part1 = (input: string[]): number => doRotations(input)[0];
 
 export const part2 = (input: string[]): number => doRotations(input)[1];
-
-// 7164

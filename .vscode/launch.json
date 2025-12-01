@@ -11,7 +11,7 @@
       "program": "src/test.ts",
       "cwd": "${workspaceFolder}",
       "env": {},
-      "runtimeExecutable": "/opt/homebrew/bin/deno",
+      "runtimeExecutable": "${env:HOME}/.deno/bin/deno",
       "runtimeArgs": [
         "test",
         "--inspect-brk",
@@ -19,7 +19,7 @@
         "--allow-write",
         "--watch",
         "--",
-        "2017/day18"
+        "2025/day1"
       ],
       "attachSimplePort": 9229
     }

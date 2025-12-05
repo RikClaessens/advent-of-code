@@ -64,7 +64,7 @@ const countFreshIngredientsInRanges = ({
   return freshIngredients;
 };
 
-const reduceOverlappingRanges = ({
+const combineOverlappingRanges = ({
   ranges,
 }: {
   ranges: Range[];
@@ -85,12 +85,19 @@ const reduceOverlappingRanges = ({
 
 export const input = getInputAsString(`src/${year}/${day}/input.txt`);
 
-export const part1 = (input: string): number =>
-  countFreshIngredientsInInventory(getRangesAndIngredients(input));
+export const part1 = (input: string): number => {
+  const { ranges, ingredients } = getRangesAndIngredients(input);
+  const { ranges: nonOverlappingRanges } = combineOverlappingRanges({ ranges });
+  return countFreshIngredientsInInventory({
+    ranges: nonOverlappingRanges,
+    ingredients,
+  });
+};
+countFreshIngredientsInInventory(getRangesAndIngredients(input));
 
 export const part2 = (input: string): number =>
   countFreshIngredientsInRanges(
-    reduceOverlappingRanges(getRangesAndIngredients(input)),
+    combineOverlappingRanges(getRangesAndIngredients(input)),
   );
 
 // 342018167474518 not correct

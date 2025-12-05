@@ -1,4 +1,4 @@
-import { assertEquals } from '@std/assert';
+import { assertEquals } from "@std/assert";
 
 const aocDay = Deno.args[0];
 
@@ -36,7 +36,17 @@ if (aocDay) {
 
   (() => {
     console.log(`🎅 ${year} ${day}`);
-    console.log(`🎄 part 1: ` + part1(input, extraPropsPart1));
-    console.log(`⛄️ part 2: ` + part2(input, extraPropsPart2));
+    const part1Start = performance.now();
+    const resultPart1 = part1(input, extraPropsPart1);
+    const part1End = performance.now();
+    console.log(
+      `🎄 part 1: ${resultPart1} (⌛ ${Number(part1End - part1Start).toFixed(6)} ms)`,
+    );
+    const part2Start = performance.now();
+    const resultPart2 = part2(input, extraPropsPart2);
+    const part2End = performance.now();
+    console.log(
+      `⛄️ part 2: ${resultPart2} (⌛ ${Number(part2End - part2Start).toFixed(6)} ms)`,
+    );
   })();
 }
